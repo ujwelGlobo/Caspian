@@ -127,35 +127,51 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-gray-800/30 backdrop-blur-sm z-30 lg:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
           onClick={onClose}
         />
       )}
 
       <aside
         className={`
-          fixed top-0 left-0 h-full z-40 flex flex-col
-          w-[248px] bg-white border-r border-gray-100
+          fixed top-14 left-0 h-[calc(100vh-56px)] z-40 flex flex-col w-[248px]
+          bg-[rgb(var(--color-surface))] border-r border-[rgb(var(--color-border-soft))]
           shadow-[2px_0_20px_rgba(0,0,0,0.08)]
           transition-transform duration-300 ease-in-out
-          lg:relative lg:translate-x-0 lg:z-auto lg:shadow-none
+          lg:fixed lg:translate-x-0 lg:z-auto lg:shadow-none
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
         {/* ── Logo Header ── */}
-        <div className="flex items-center gap-3 px-4 py-4 border-b border-gray-100 flex-shrink-0">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0">
+        <div className="flex items-center gap-3 px-4 py-4 border-b border-[rgb(var(--color-border-soft))] flex-shrink-0">
+          <div
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0"
+            style={{ background: `rgb(var(--accent))` }}
+          >
             C
           </div>
           <div>
-            <p className="text-[14px] font-bold text-gray-800 leading-none tracking-tight">CorpCRM</p>
-            <p className="text-[10px] text-gray-400 leading-none mt-0.5">Management Suite</p>
+            <p className="text-[14px] font-bold leading-none tracking-tight text-[rgb(var(--color-text))]">
+              CorpCRM
+            </p>
+            <p className="text-[10px] leading-none mt-0.5 text-[rgb(var(--color-text-muted))]">
+              Management Suite
+            </p>
           </div>
-      
+          <span
+            className="ml-auto text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border"
+            style={{
+              color: `rgb(var(--accent))`,
+              background: `rgb(var(--accent-light))`,
+              borderColor: `rgb(var(--accent-border))`,
+            }}
+          >
+            Pro
+          </span>
           {/* Mobile close */}
           <button
             onClick={onClose}
-            className="lg:hidden w-6 h-6 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors ml-1"
+            className="lg:hidden w-6 h-6 flex items-center justify-center rounded-md transition-colors ml-1 text-[rgb(var(--color-text-muted))] hover:text-[rgb(var(--color-text))] hover:bg-[rgb(var(--color-bg-muted))]"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -163,12 +179,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           </button>
         </div>
 
-      
+ 
 
         {/* ── Nav ── */}
         <nav className="flex-1 overflow-y-auto px-2 pb-2 sidebar-scroll">
           {menu.map((item) => {
-            /* Simple link */
             if (!item.children) {
               return (
                 <NavLink
@@ -176,14 +191,23 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                   to={item.path!}
                   onClick={onClose}
                   className={({ isActive }) =>
-                    `flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-medium mb-0.5 transition-all duration-150
-                    ${isActive
-                      ? "bg-orange-50 text-orange-600 border border-orange-100 shadow-[0_1px_3px_rgba(249,115,22,0.12)]"
-                      : "text-black hover:text-gray-700 hover:bg-gray-50"
-                    }`
+                    `flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-medium mb-0.5 transition-all duration-150 border
+                    ${isActive ? "active-nav-item" : "inactive-nav-item"}`
+                  }
+                  style={({ isActive }) =>
+                    isActive
+                      ? {
+                          background: `rgb(var(--accent-light))`,
+                          color: `rgb(var(--accent))`,
+                          borderColor: `rgb(var(--accent-border))`,
+                        }
+                      : {
+                          color: `rgb(var(--color-text-soft))`,
+                          borderColor: "transparent",
+                        }
                   }
                 >
-                  <span className="text-gray-400 text-[12px]">{item.icon}</span>
+                  <span className="text-[12px] text-[rgb(var(--color-text-muted))]">{item.icon}</span>
                   {item.name}
                 </NavLink>
               );
@@ -193,29 +217,28 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
             return (
               <div key={item.name} className="mb-0.5">
-                {/* Parent toggle */}
                 <button
                   onClick={() => toggleMenu(item.name)}
-                  className={`
-                    w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-medium
-                    transition-all duration-150 text-left group
-                    ${isExpanded
-                      ? "text-gray-700 bg-gray-50"
-                      : "text-black hover:text-gray-700 hover:bg-gray-50"
-                    }
-                  `}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-medium transition-all duration-150 text-left"
+                  style={{
+                    color: isExpanded ? `rgb(var(--color-text))` : `rgb(var(--color-text-soft))`,
+                    background: isExpanded ? `rgb(var(--color-bg-soft))` : "transparent",
+                  }}
                 >
-                  <span className="text-gray-400 text-[12px]">{item.icon}</span>
+                  <span className="text-[12px] text-[rgb(var(--color-text-muted))]">{item.icon}</span>
                   <span className="flex-1 text-left">{item.name}</span>
-
-                  {/* Count badge */}
-                  <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full font-mono">
+                  <span
+                    className="text-[10px] px-1.5 py-0.5 rounded-full font-mono"
+                    style={{
+                      color: `rgb(var(--color-text-muted))`,
+                      background: `rgb(var(--color-bg-muted))`,
+                    }}
+                  >
                     {item.children.length}
                   </span>
-
-                  {/* Chevron */}
                   <svg
-                    className={`w-3.5 h-3.5 text-gray-300 transition-transform duration-200 ml-0.5 ${isExpanded ? "rotate-90" : ""}`}
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ml-0.5 ${isExpanded ? "rotate-90" : ""}`}
+                    style={{ color: `rgb(var(--color-text-muted))` }}
                     fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -224,27 +247,34 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
                 {/* Animated submenu */}
                 <div
-                  className={`overflow-hidden transition-all duration-250 ease-in-out ${
+                  className={`overflow-hidden transition-all duration-200 ease-in-out ${
                     isExpanded ? "max-h-[700px] opacity-100" : "max-h-0 opacity-0"
                   }`}
                 >
-                  <div className="ml-[22px] my-1 border-l-2 border-orange-100 pl-3 flex flex-col gap-0.5">
+                  <div
+                    className="ml-[22px] my-1 pl-3 flex flex-col gap-0.5 border-l-2"
+                    style={{ borderColor: `rgb(var(--accent-border))` }}
+                  >
                     {item.children.map((child, idx) => (
                       <NavLink
                         key={`${child.name}-${idx}`}
                         to={child.path}
                         onClick={onClose}
-                        className={({ isActive }) =>
-                          `flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12px] transition-all duration-150
-                          ${isActive
-                            ? "text-orange-600 bg-orange-50 font-semibold"
-                            : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
-                          }`
+                        className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12px] transition-all duration-150"
+                        style={({ isActive }) =>
+                          isActive
+                            ? {
+                                color: `rgb(var(--accent))`,
+                                background: `rgb(var(--accent-light))`,
+                                fontWeight: 600,
+                              }
+                            : { color: `rgb(var(--color-text-muted))` }
                         }
                       >
-                        <span className={`w-1 h-1 rounded-full flex-shrink-0 transition-colors ${
-                          false ? "bg-orange-400" : "bg-gray-200"
-                        }`} />
+                        <span
+                          className="w-1 h-1 rounded-full flex-shrink-0"
+                          style={{ background: `rgb(var(--color-border))` }}
+                        />
                         {child.name}
                       </NavLink>
                     ))}
@@ -256,16 +286,32 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         </nav>
 
         {/* ── User Footer ── */}
-        <div className="border-t border-gray-100 px-3 py-3 bg-gray-50/80 flex-shrink-0">
+        <div
+          className="border-t px-3 py-3 flex-shrink-0"
+          style={{
+            borderColor: `rgb(var(--color-border-soft))`,
+            background: `rgb(var(--color-bg-soft))`,
+          }}
+        >
           <div className="flex items-center gap-2.5 px-1">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white text-[12px] font-bold flex-shrink-0 shadow-sm">
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[12px] font-bold flex-shrink-0 shadow-sm"
+              style={{ background: `rgb(var(--accent))` }}
+            >
               A
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[12.5px] font-semibold text-gray-700 truncate leading-none">Admin User</p>
-              <p className="text-[10.5px] text-gray-400 truncate mt-0.5">admin@corpcrm.com</p>
+              <p className="text-[12.5px] font-semibold truncate leading-none text-[rgb(var(--color-text))]">
+                Admin User
+              </p>
+              <p className="text-[10.5px] truncate mt-0.5 text-[rgb(var(--color-text-muted))]">
+                admin@corpcrm.com
+              </p>
             </div>
-            <button className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-white transition-all border border-transparent hover:border-gray-200">
+            <button
+              className="w-7 h-7 flex items-center justify-center rounded-lg transition-all border border-transparent"
+              style={{ color: `rgb(var(--color-text-muted))` }}
+            >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -278,8 +324,12 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       <style>{`
         .sidebar-scroll::-webkit-scrollbar { width: 3px; }
         .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #f3f4f6; border-radius: 4px; }
-        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #e5e7eb; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: rgb(var(--color-border)); border-radius: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgb(var(--color-border)); opacity: 0.8; }
+        .inactive-nav-item:hover {
+          background: rgb(var(--color-bg-soft));
+          color: rgb(var(--color-text));
+        }
       `}</style>
     </>
   );

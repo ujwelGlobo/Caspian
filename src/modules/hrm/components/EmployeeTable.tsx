@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import TableWrapper from "../../../shared/components/ui/TableWrapper";
+import { useEmployees } from "../api/useEmployees";
 
 type Employee = {
 id: number;
@@ -8,19 +9,28 @@ role: string;
 department: string;
 };
 
-const data: Employee[] = [
-{ id: 1, name: "John Doe", role: "Developer", department: "IT" },
-{ id: 2, name: "Jane Smith", role: "HR Manager", department: "HR" },
-];
-
 const columns: ColumnDef<Employee>[] = [
+{ accessorKey: "id", header: "ID" },
 { accessorKey: "name", header: "Name" },
 { accessorKey: "role", header: "Role" },
 { accessorKey: "department", header: "Department" },
 ];
 
 const EmployeeTable = () => {
-return <TableWrapper data={data} columns={columns} />;
+const { data, isLoading } = useEmployees(); // ✅ correct place
+
+if (isLoading) {
+return <div>Loading employees...</div>;
+}
+
+return (
+<TableWrapper
+data={data ?? []}   // ✅ safe fallback
+columns={columns}
+title="Employees"
+subtitle="All registered employees"
+/>
+);
 };
 
 export default EmployeeTable;
