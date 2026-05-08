@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { employeeSchema, type EmployeeFormData } from "../schema/employeeSchema";
 import { useAddEmployee } from "../api/useAddEmployee";
+import { useTranslation } from "react-i18next";
 
 const BRANCHES = ["Head Office", "North Branch", "South Branch", "East Branch"];
 const DEPARTMENTS = ["Engineering", "Design", "HR", "Finance", "Sales", "Marketing"];
@@ -81,6 +82,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 const EmployeeForm = () => {
   const { mutate, isPending } = useAddEmployee();
+  const { t } = useTranslation(["employees", "common"]);
   const [fileName, setFileName] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -119,17 +121,17 @@ const EmployeeForm = () => {
           className="text-[18px] font-bold tracking-tight"
           style={{ color: `rgb(var(--color-text))` }}
         >
-          Create Employee
+          {t("createEmployee")}
         </h1>
         <div
           className="flex items-center gap-1.5 mt-1 text-[12px]"
           style={{ color: `rgb(var(--color-text-muted))` }}
         >
-          <span>Dashboard</span>
+          <span>{t("dashboard", { ns: "common" })}</span>
           <span>›</span>
-          <span>Employee</span>
+          <span>{t("employees")}</span>
           <span>›</span>
-          <span style={{ color: `rgb(var(--color-text-soft))` }}>Create Employee</span>
+          <span style={{ color: `rgb(var(--color-text-soft))` }}>{t("createEmployee")}</span>
         </div>
       </div>
 
@@ -138,26 +140,26 @@ const EmployeeForm = () => {
 
           {/* LEFT — Personal + Document */}
           <div className="flex flex-col gap-4">
-            <Section title="Personal Detail">
+            <Section title={t("personalDetail")}>
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Name" required error={errors.name?.message}>
+                <Field label={t("name")} required error={errors.name?.message}>
                   <input {...register("name")} placeholder="Enter employee Name" className={inputCls(!!errors.name)} />
                 </Field>
-                <Field label="Phone" required error={errors.phone?.message}>
+                <Field label={t("phone")} required error={errors.phone?.message}>
                   <input {...register("phone")} placeholder="Enter employee phone" className={inputCls(!!errors.phone)} />
                 </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Date of Birth" required error={errors.dateOfBirth?.message}>
+                <Field label={t("dateOfBirth")} required error={errors.dateOfBirth?.message}>
                   <input {...register("dateOfBirth")} type="date" className={inputCls(!!errors.dateOfBirth)} />
                 </Field>
-                <Field label="Gender" required error={errors.gender?.message}>
+                <Field label={t("gender")} required error={errors.gender?.message}>
                   <div className="flex items-center gap-4 pt-2">
                     {(["male", "female"] as const).map((g) => (
                       <label key={g} className="flex items-center gap-1.5 text-[13px] cursor-pointer" style={{ color: `rgb(var(--color-text))` }}>
                         <input {...register("gender")} type="radio" value={g} className="w-3.5 h-3.5" />
-                        {g.charAt(0).toUpperCase() + g.slice(1)}
+                        {t(g)}
                       </label>
                     ))}
                   </div>
@@ -165,21 +167,21 @@ const EmployeeForm = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Email" required error={errors.email?.message}>
+                <Field label={t("email")} required error={errors.email?.message}>
                   <input {...register("email")} type="email" placeholder="Enter email address" className={inputCls(!!errors.email)} />
                 </Field>
-                <Field label="Password" required error={errors.password?.message}>
+                <Field label={t("password")} required error={errors.password?.message}>
                   <input {...register("password")} type="password" placeholder="••••••••" className={inputCls(!!errors.password)} />
                 </Field>
               </div>
 
-              <Field label="Address" required error={errors.address?.message}>
+              <Field label={t("address")} required error={errors.address?.message}>
                 <textarea {...register("address")} rows={3} placeholder="Enter employee address" className={inputCls(!!errors.address) + " resize-none"} />
               </Field>
             </Section>
 
-            <Section title="Document">
-              <Field label="Upload Document" error={errors.document?.message as string}>
+            <Section title={t("document")}>
+              <Field label={t("uploadDocument")} error={errors.document?.message as string}>
                 <div
                   className="relative rounded-lg border-2 border-dashed transition-all cursor-pointer"
                   style={{ borderColor: `rgb(var(--color-border))`, background: `rgb(var(--color-bg-soft))` }}
@@ -193,8 +195,8 @@ const EmployeeForm = () => {
                       <p className="text-[12px] font-medium" style={{ color: `rgb(var(--accent))` }}>{fileName}</p>
                     ) : (
                       <>
-                        <p className="text-[12px] font-medium" style={{ color: `rgb(var(--color-text-soft))` }}>Click to upload or drag & drop</p>
-                        <p className="text-[11px]" style={{ color: `rgb(var(--color-text-muted))` }}>PDF, JPG, PNG — max 5MB</p>
+                        <p className="text-[12px] font-medium" style={{ color: `rgb(var(--color-text-soft))` }}>{t("clickToUpload")}</p>
+                        <p className="text-[11px]" style={{ color: `rgb(var(--color-text-muted))` }}>{t("fileTypes")}</p>
                       </>
                     )}
                   </div>
@@ -219,70 +221,70 @@ const EmployeeForm = () => {
 
           {/* RIGHT — Company + Bank */}
           <div className="flex flex-col gap-4">
-            <Section title="Company Detail">
-              <Field label="Employee ID" error={errors.employeeId?.message}>
+            <Section title={t("companyDetail")}>
+              <Field label={t("employeeId")} error={errors.employeeId?.message}>
                 <input {...register("employeeId")} placeholder="Enter employee code" className={inputCls(!!errors.employeeId)} />
               </Field>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Branch" required error={errors.branch?.message}>
+                <Field label={t("branch")} required error={errors.branch?.message}>
                   <select {...register("branch")} className={inputCls(!!errors.branch)}>
-                    <option value="">Select Branch</option>
+                    <option value="">{t("selectBranch")}</option>
                     {BRANCHES.map((b) => <option key={b} value={b}>{b}</option>)}
                   </select>
                 </Field>
-                <Field label="Department" required error={errors.department?.message}>
+                <Field label={t("department")} required error={errors.department?.message}>
                   <select {...register("department")} className={inputCls(!!errors.department)}>
-                    <option value="">Select Department</option>
+                    <option value="">{t("selectDepartment")}</option>
                     {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
                   </select>
                 </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Designation" required error={errors.designation?.message}>
+                <Field label={t("designation")} required error={errors.designation?.message}>
                   <select {...register("designation")} className={inputCls(!!errors.designation)}>
-                    <option value="">Select Designation</option>
+                    <option value="">{t("selectDesignation")}</option>
                     {DESIGNATIONS.map((d) => <option key={d} value={d}>{d}</option>)}
                   </select>
                 </Field>
-                <Field label="Role" required error={errors.role?.message}>
+                <Field label={t("role")} required error={errors.role?.message}>
                   <select {...register("role")} className={inputCls(!!errors.role)}>
-                    <option value="">Select Role</option>
+                    <option value="">{t("selectRole")}</option>
                     {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
                   </select>
                 </Field>
               </div>
 
-              <Field label="Company Date Of Joining" error={errors.companyJoiningDate?.message}>
+              <Field label={t("joiningDate")} error={errors.companyJoiningDate?.message}>
                 <input {...register("companyJoiningDate")} type="date" className={inputCls(!!errors.companyJoiningDate)} />
               </Field>
             </Section>
 
-            <Section title="Bank Account Detail">
+            <Section title={t("bankAccountDetail")}>
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Account Holder Name" error={errors.accountHolderName?.message}>
+                <Field label={t("accountHolderName")} error={errors.accountHolderName?.message}>
                   <input {...register("accountHolderName")} placeholder="Enter Account Holder Name" className={inputCls(!!errors.accountHolderName)} />
                 </Field>
-                <Field label="Account Number" error={errors.accountNumber?.message}>
+                <Field label={t("accountNumber")} error={errors.accountNumber?.message}>
                   <input {...register("accountNumber")} placeholder="Enter Account Number" className={inputCls(!!errors.accountNumber)} />
                 </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Bank Name" error={errors.bankName?.message}>
+                <Field label={t("bankName")} error={errors.bankName?.message}>
                   <input {...register("bankName")} placeholder="Enter Bank Name" className={inputCls(!!errors.bankName)} />
                 </Field>
-                <Field label="Bank Identifier Code" error={errors.bankIdentifierCode?.message}>
+                <Field label={t("bankIdentifierCode")} error={errors.bankIdentifierCode?.message}>
                   <input {...register("bankIdentifierCode")} placeholder="Enter Bank Identifier Code" className={inputCls(!!errors.bankIdentifierCode)} />
                 </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Branch Location" error={errors.branchLocation?.message}>
+                <Field label={t("branchLocation")} error={errors.branchLocation?.message}>
                   <input {...register("branchLocation")} placeholder="Enter Branch Location" className={inputCls(!!errors.branchLocation)} />
                 </Field>
-                <Field label="Tax Payer Id" error={errors.taxPayerId?.message}>
+                <Field label={t("taxPayerId")} error={errors.taxPayerId?.message}>
                   <input {...register("taxPayerId")} placeholder="Enter Tax Payer Id" className={inputCls(!!errors.taxPayerId)} />
                 </Field>
               </div>
@@ -301,7 +303,7 @@ const EmployeeForm = () => {
             className="px-5 py-2 rounded-lg text-[13px] font-medium transition-all"
             style={{ color: `rgb(var(--color-text-soft))`, border: `1px solid rgb(var(--color-border))`, background: "transparent" }}
           >
-            Cancel
+            {t("cancel", { ns: "common" })}
           </button>
           <button
             type="submit"
@@ -315,9 +317,9 @@ const EmployeeForm = () => {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                 </svg>
-                Creating...
+                {t("creating", { ns: "common" })}
               </span>
-            ) : "Create"}
+            ) : t("create", { ns: "common" })}
           </button>
         </div>
       </form>

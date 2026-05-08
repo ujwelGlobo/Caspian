@@ -30,6 +30,24 @@
   --color-surface-raised: 249 250 251; /* gray-50 */
 }
 
+/* Blue Theme */
+[data-theme="blue"] {
+  --accent:           59 130 246;   /* blue-500 */
+  --accent-hover:     37 99 235;    /* blue-600 */
+  --accent-light:     239 246 255;  /* blue-50 */
+  --accent-mid:       147 197 253;  /* blue-300 */
+  --accent-border:    191 219 254;  /* blue-200 */
+}
+
+/* Emerald Theme */
+[data-theme="emerald"] {
+  --accent:           16 185 129;   /* emerald-500 */
+  --accent-hover:     5 150 105;    /* emerald-600 */
+  --accent-light:     236 253 245;  /* emerald-50 */
+  --accent-mid:       110 231 183;  /* emerald-300 */
+  --accent-border:    167 243 208;  /* emerald-200 */
+}
+
 /* ── Dark Theme ── */
 .dark {
   /* Accent (slightly lighter for dark bg readability) */
@@ -56,6 +74,22 @@
   /* Surface */
   --color-surface:    17  24  39;   /* gray-900 */
   --color-surface-raised: 31 41 55; /* gray-800 */
+}
+
+.dark[data-theme="blue"] {
+  --accent:           96 165 250;   /* blue-400 */
+  --accent-hover:     59 130 246;   /* blue-500 */
+  --accent-light:     30 58 138;    /* blue-900 */
+  --accent-mid:       30 64 175;    /* blue-800 */
+  --accent-border:    30 58 138;    /* blue-900 */
+}
+
+.dark[data-theme="emerald"] {
+  --accent:           52 211 153;   /* emerald-400 */
+  --accent-hover:     16 185 129;   /* emerald-500 */
+  --accent-light:     6 78 59;      /* emerald-900 */
+  --accent-mid:       6 95 70;      /* emerald-800 */
+  --accent-border:    6 78 59;      /* emerald-900 */
 }
 
 /* ── Smooth theme transition ── */

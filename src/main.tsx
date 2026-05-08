@@ -5,13 +5,17 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { router } from "./routes/AppRoutes";
 import "./lib/i18n"; // ← add this line
 import "./styles/globals.css";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+  <Provider store={store}>
+  <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />
+  </QueryClientProvider>
+</Provider>
   </StrictMode>
 );

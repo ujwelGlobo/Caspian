@@ -29,7 +29,6 @@ function TableWrapper<T>({ data, columns, title, subtitle }: Props<T>) {
     onSortingChange: setSorting,
     initialState: { pagination: { pageSize } },
   });
-
   const { pageIndex } = table.getState().pagination;
   const totalPages = table.getPageCount();
   const totalRows = data.length;
@@ -252,17 +251,13 @@ function TableWrapper<T>({ data, columns, title, subtitle }: Props<T>) {
               onChange={(e) => {
                 const val = Number(e.target.value);
                 setPageSize(val);
-                table.setPageSize(val);
-              }}
+                table.setPageSize(val);}}
               className="text-[12px] rounded-lg px-2 py-1 outline-none transition-all cursor-pointer"
-              style={{
-                color: `rgb(var(--color-text-soft))`,
+              style={{color: `rgb(var(--color-text-soft))`,
                 background: `rgb(var(--color-surface))`,
-                border: `1px solid rgb(var(--color-border))`,
-              }}
-            >
+                border: `1px solid rgb(var(--color-border))`,}}>
               {[5, 10, 20, 50].map((n) => (
-                <option key={n} value={n}>{n} / page</option>
+                <option key={n} value={n}>{n}page</option>
               ))}
             </select>
           </div>

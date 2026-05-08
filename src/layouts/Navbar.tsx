@@ -8,14 +8,19 @@ interface NavbarProps {
 }
 
 const Navbar = ({ onMenuToggle }: NavbarProps) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const [isDark, setIsDark] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
+  const [colorTheme, setColorTheme] = useState(() => {
+    return localStorage.getItem("colorTheme") || "orange";
+  });
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
+  const themeRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +34,16 @@ const Navbar = ({ onMenuToggle }: NavbarProps) => {
     }
   }, [isDark]);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    if (colorTheme === "orange") {
+      root.removeAttribute("data-theme");
+    } else {
+      root.setAttribute("data-theme", colorTheme);
+    }
+    localStorage.setItem("colorTheme", colorTheme);
+  }, [colorTheme]);
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -37,6 +52,9 @@ const Navbar = ({ onMenuToggle }: NavbarProps) => {
       }
       if (langRef.current && !langRef.current.contains(e.target as Node)) {
         setLangOpen(false);
+      }
+      if (themeRef.current && !themeRef.current.contains(e.target as Node)) {
+        setThemeOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -176,6 +194,49 @@ const Navbar = ({ onMenuToggle }: NavbarProps) => {
                   </button>
                 ))}
               </div>
+            </div>
+          )}
+        </div>
+
+        {/* ── Theme Switcher ── */}
+        <div className="relative" ref={themeRef}>
+          <button
+            onClick={() => setThemeOpen((prev) => !prev)}
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:bg-[rgb(var(--color-bg-muted))]"
+            aria-label="Change color theme"
+          >
+            <svg className="w-[18px] h-[18px] text-[rgb(var(--color-text-muted))] hover:text-[rgb(var(--color-text-soft))]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+            </svg>
+          </button>
+
+          {themeOpen && (
+            <div
+              className="absolute right-0 top-[calc(100%+8px)] w-36 rounded-xl overflow-hidden z-50 p-2 space-y-1"
+              style={{
+                background: `rgb(var(--color-surface))`,
+                border: `1px solid rgb(var(--color-border-soft))`,
+                boxShadow: `0 8px 24px rgba(0,0,0,0.10)`,
+              }}
+            >
+              {[
+                { id: "orange", label: "Orange", color: "bg-orange-500" },
+                { id: "blue", label: "Blue", color: "bg-blue-500" },
+                { id: "emerald", label: "Emerald", color: "bg-emerald-500" },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => { setColorTheme(t.id); setThemeOpen(false); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors hover:bg-[rgb(var(--color-bg-soft))]"
+                  style={{
+                    color: t.id === colorTheme ? `rgb(var(--accent))` : `rgb(var(--color-text-soft))`,
+                    fontWeight: t.id === colorTheme ? 600 : 400,
+                  }}
+                >
+                  <span className={`w-3.5 h-3.5 rounded-full ${t.color}`} />
+                  {t.label}
+                </button>
+              ))}
             </div>
           )}
         </div>

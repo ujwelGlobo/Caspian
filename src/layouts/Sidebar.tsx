@@ -1,114 +1,7 @@
+// src/layouts/Sidebar.tsx
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-
-const menu = [
-  { name: "Dashboard", path: "/", icon: "⊞" },
-  {
-    name: "Business Dev",
-    icon: "◈",
-    children: [
-      { name: "Clients", path: "/biz/clients" },
-      { name: "Sourcing", path: "/biz/sourcing" },
-      { name: "Candidate", path: "/biz/candidate" },
-    ],
-  },
-  {
-    name: "On Boarding",
-    icon: "◎",
-    children: [
-      { name: "Onboarding", path: "/onboard/main" },
-      { name: "Requirement List", path: "/onboard/requirements" },
-      { name: "Induction Reports", path: "/onboard/induction" },
-    ],
-  },
-  { name: "Compliance", path: "/compliances", icon: "◻" },
-  {
-    name: "Client Service",
-    icon: "◇",
-    children: [
-      { name: "Attendance & Salary", path: "/cs/attendance" },
-      { name: "ID & Visiting", path: "/cs/id" },
-      { name: "Reimbursement", path: "/cs/reimbursement" },
-      { name: "Grievance", path: "/cs/grievance" },
-      { name: "Incentive", path: "/cs/incentive" },
-      { name: "Resignation", path: "/cs/resignation" },
-      { name: "Recruitment Track", path: "/cs/recruitment" },
-      { name: "Designation Manage", path: "/cs/designation" },
-    ],
-  },
-  {
-    name: "Finance",
-    icon: "◑",
-    children: [
-      { name: "Salary Process", path: "/finance/salary" },
-      { name: "F&F Tracker", path: "/finance/ff" },
-      { name: "Invoice", path: "/finance/invoice" },
-      { name: "Annexure", path: "/finance/annexure" },
-      { name: "Incentive List", path: "/finance/incentive" },
-      { name: "Reimbursement", path: "/finance/reimbursement" },
-      { name: "Bonus", path: "/finance/bonus" },
-      { name: "ID & Visiting Card", path: "/finance/id" },
-      { name: "Leave Encashment", path: "/finance/leave" },
-      { name: "Recruitment Tracker", path: "/finance/recruitment" },
-      { name: "Wage Sheet", path: "/finance/wage" },
-    ],
-  },
-  {
-    name: "Exit Management",
-    icon: "◐",
-    children: [
-      { name: "Exit Management", path: "/exit/manage" },
-      { name: "F&F Details", path: "/exit/ff" },
-    ],
-  },
-  {
-    name: "HRM",
-    icon: "◉",
-    children: [
-      { name: "Employees", path: "/hrm/employees" },
-      { name: "HRMS Details", path: "/hrm/details" },
-      { name: "Company Policy", path: "/hrm/policy" },
-      { name: "System Setup", path: "/hrm/setup" },
-      { name: "Mails", path: "/hrm/mails" },
-    ],
-  },
-  {
-    name: "Reports",
-    icon: "◬",
-    children: [
-      { name: "Manage Candidate", path: "/reports/candidate" },
-      { name: "Leave Encashment", path: "/reports/leave" },
-      { name: "Annexure Report", path: "/reports/annexure" },
-      { name: "Resignation", path: "/reports/resignation" },
-      { name: "Employee OnBoarding", path: "/reports/onboarding" },
-      { name: "Reimbursement", path: "/reports/reimbursement" },
-      { name: "Grievance", path: "/reports/grievance" },
-      { name: "ID & Visiting Details", path: "/reports/id" },
-      { name: "Recruitment & Payouts", path: "/reports/recruitment" },
-      { name: "F&F Tracker", path: "/reports/ff" },
-      { name: "Incentive Tracker", path: "/reports/incentive" },
-      { name: "Invoice List", path: "/reports/invoice" },
-    ],
-  },
-  {
-    name: "User Management",
-    icon: "◯",
-    children: [
-      { name: "User", path: "/users/list" },
-      { name: "Role", path: "/users/roles" },
-    ],
-  },
-  { name: "Messenger", path: "/messenger", icon: "◫" },
-  {
-    name: "Settings",
-    icon: "◌",
-    children: [
-      { name: "System Settings", path: "/settings/system" },
-      { name: "Subscription Plan", path: "/settings/subscription" },
-      { name: "Order", path: "/settings/order" },
-    ],
-  },
-];
+import { useTranslation } from "react-i18next";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -116,11 +9,114 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+const { t } = useTranslation("sidebar");
+
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
   const toggleMenu = (name: string) => {
     setOpenMenus((prev) => ({ ...prev, [name]: !prev[name] }));
   };
+
+  // Menu inside component so t() is always fresh on language change
+  const menu = [
+    { key: "dashboard", path: "/", icon: "⊞" },
+    {
+      key: "businessDev", icon: "◈",
+      children: [
+        { key: "clients",   path: "/biz/clients"    },
+        { key: "sourcing",  path: "/biz/sourcing"   },
+        { key: "candidate", path: "/biz/candidate"  },
+      ],
+    },
+    {
+      key: "onBoarding", icon: "◎",
+      children: [
+        { key: "onboarding",       path: "/onboard/main"         },
+        { key: "requirementList",  path: "/onboard/requirements" },
+        { key: "inductionReports", path: "/onboard/induction"    },
+      ],
+    },
+    { key: "compliance", path: "/compliances", icon: "◻" },
+    {
+      key: "clientService", icon: "◇",
+      children: [
+        { key: "attendanceSalary",  path: "/cs/attendance"  },
+        { key: "idVisiting",        path: "/cs/id"          },
+        { key: "reimbursement",     path: "/cs/reimbursement"},
+        { key: "grievance",         path: "/cs/grievance"   },
+        { key: "incentive",         path: "/cs/incentive"   },
+        { key: "resignation",       path: "/cs/resignation" },
+        { key: "recruitmentTrack",  path: "/cs/recruitment" },
+        { key: "designationManage", path: "/cs/designation" },
+      ],
+    },
+    {
+      key: "finance", icon: "◑",
+      children: [
+        { key: "salaryProcess",      path: "/finance/salary"      },
+        { key: "ffTracker",          path: "/finance/ff"          },
+        { key: "invoice",            path: "/finance/invoice"     },
+        { key: "annexure",           path: "/finance/annexure"    },
+        { key: "incentiveList",      path: "/finance/incentive"   },
+        { key: "reimbursement",      path: "/finance/reimbursement"},
+        { key: "bonus",              path: "/finance/bonus"       },
+        { key: "idVisitingCard",     path: "/finance/id"          },
+        { key: "leaveEncashment",    path: "/finance/leave"       },
+        { key: "recruitmentTracker", path: "/finance/recruitment" },
+        { key: "wageSheet",          path: "/finance/wage"        },
+      ],
+    },
+    {
+      key: "exitManagement", icon: "◐",
+      children: [
+        { key: "exitManagement", path: "/exit/manage" },
+        { key: "ffDetails",      path: "/exit/ff"     },
+      ],
+    },
+    {
+      key: "hrm", icon: "◉",
+      children: [
+        { key: "employees",     path: "/hrm/employees" },
+        { key: "hrmsDetails",   path: "/hrm/details"   },
+        { key: "companyPolicy", path: "/hrm/policy"    },
+        { key: "systemSetup",   path: "/hrm/setup"     },
+        { key: "mails",         path: "/hrm/mails"     },
+      ],
+    },
+    {
+      key: "reports", icon: "◬",
+      children: [
+        { key: "manageCandidate",    path: "/reports/candidate"   },
+        { key: "leaveEncashment",    path: "/reports/leave"       },
+        { key: "annexureReport",     path: "/reports/annexure"    },
+        { key: "resignation",        path: "/reports/resignation" },
+        { key: "employeeOnBoarding", path: "/reports/onboarding"  },
+        { key: "reimbursement",      path: "/reports/reimbursement"},
+        { key: "grievanceReport",    path: "/reports/grievance"   },
+        { key: "idVisitingDetails",  path: "/reports/id"          },
+        { key: "recruitmentPayouts", path: "/reports/recruitment" },
+        { key: "ffTrackerReport",    path: "/reports/ff"          },
+        { key: "incentiveTracker",   path: "/reports/incentive"   },
+        { key: "invoiceList",        path: "/reports/invoice"     },
+      ],
+    },
+    {
+      key: "userManagement", icon: "◯",
+      children: [
+        { key: "user", path: "/users/list"  },
+        { key: "role", path: "/users/roles" },
+      ],
+    },
+    { key: "messenger", path: "/messenger", icon: "◫" },
+    {
+      key: "settings", icon: "◌",
+      children: [
+        { key: "systemSettings",   path: "/settings/system"       },
+        { key: "subscriptionPlan", path: "/settings/subscription" },
+        { key: "order",            path: "/settings/order"        },
+      ],
+    },
+  ];
 
   return (
     <>
@@ -142,7 +138,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* ── Logo Header ── */}
+        {/* Logo Header */}
         <div className="flex items-center gap-3 px-4 py-4 border-b border-[rgb(var(--color-border-soft))] flex-shrink-0">
           <div
             className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-sm flex-shrink-0"
@@ -168,7 +164,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           >
             Pro
           </span>
-          {/* Mobile close */}
           <button
             onClick={onClose}
             className="lg:hidden w-6 h-6 flex items-center justify-center rounded-md transition-colors ml-1 text-[rgb(var(--color-text-muted))] hover:text-[rgb(var(--color-text))] hover:bg-[rgb(var(--color-bg-muted))]"
@@ -179,15 +174,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           </button>
         </div>
 
- 
-
-        {/* ── Nav ── */}
+        {/* Nav */}
         <nav className="flex-1 overflow-y-auto px-2 pb-2 sidebar-scroll">
           {menu.map((item) => {
             if (!item.children) {
               return (
                 <NavLink
-                  key={item.name + item.path}
+                  key={item.key}
                   to={item.path!}
                   onClick={onClose}
                   className={({ isActive }) =>
@@ -196,29 +189,22 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                   }
                   style={({ isActive }) =>
                     isActive
-                      ? {
-                          background: `rgb(var(--accent-light))`,
-                          color: `rgb(var(--accent))`,
-                          borderColor: `rgb(var(--accent-border))`,
-                        }
-                      : {
-                          color: `rgb(var(--color-text-soft))`,
-                          borderColor: "transparent",
-                        }
+                      ? { background: `rgb(var(--accent-light))`, color: `rgb(var(--accent))`, borderColor: `rgb(var(--accent-border))` }
+                      : { color: `rgb(var(--color-text-soft))`, borderColor: "transparent" }
                   }
                 >
                   <span className="text-[12px] text-[rgb(var(--color-text-muted))]">{item.icon}</span>
-                  {item.name}
+                  {t(item.key)}
                 </NavLink>
               );
             }
 
-            const isExpanded = openMenus[item.name] ?? false;
+            const isExpanded = openMenus[item.key] ?? false;
 
             return (
-              <div key={item.name} className="mb-0.5">
+              <div key={item.key} className="mb-0.5">
                 <button
-                  onClick={() => toggleMenu(item.name)}
+                  onClick={() => toggleMenu(item.key)}
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12.5px] font-medium transition-all duration-150 text-left"
                   style={{
                     color: isExpanded ? `rgb(var(--color-text))` : `rgb(var(--color-text-soft))`,
@@ -226,13 +212,10 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                   }}
                 >
                   <span className="text-[12px] text-[rgb(var(--color-text-muted))]">{item.icon}</span>
-                  <span className="flex-1 text-left">{item.name}</span>
+                  <span className="flex-1 text-left">{t(item.key)}</span>
                   <span
                     className="text-[10px] px-1.5 py-0.5 rounded-full font-mono"
-                    style={{
-                      color: `rgb(var(--color-text-muted))`,
-                      background: `rgb(var(--color-bg-muted))`,
-                    }}
+                    style={{ color: `rgb(var(--color-text-muted))`, background: `rgb(var(--color-bg-muted))` }}
                   >
                     {item.children.length}
                   </span>
@@ -245,37 +228,25 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                   </svg>
                 </button>
 
-                {/* Animated submenu */}
-                <div
-                  className={`overflow-hidden transition-all duration-200 ease-in-out ${
-                    isExpanded ? "max-h-[700px] opacity-100" : "max-h-0 opacity-0"
-                  }`}
-                >
+                <div className={`overflow-hidden transition-all duration-200 ease-in-out ${isExpanded ? "max-h-[700px] opacity-100" : "max-h-0 opacity-0"}`}>
                   <div
                     className="ml-[22px] my-1 pl-3 flex flex-col gap-0.5 border-l-2"
                     style={{ borderColor: `rgb(var(--accent-border))` }}
                   >
                     {item.children.map((child, idx) => (
                       <NavLink
-                        key={`${child.name}-${idx}`}
+                        key={`${child.key}-${idx}`}
                         to={child.path}
                         onClick={onClose}
                         className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[12px] transition-all duration-150"
                         style={({ isActive }) =>
                           isActive
-                            ? {
-                                color: `rgb(var(--accent))`,
-                                background: `rgb(var(--accent-light))`,
-                                fontWeight: 600,
-                              }
+                            ? { color: `rgb(var(--accent))`, background: `rgb(var(--accent-light))`, fontWeight: 600 }
                             : { color: `rgb(var(--color-text-muted))` }
                         }
                       >
-                        <span
-                          className="w-1 h-1 rounded-full flex-shrink-0"
-                          style={{ background: `rgb(var(--color-border))` }}
-                        />
-                        {child.name}
+                        <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: `rgb(var(--color-border))` }} />
+                        {t(child.key)}
                       </NavLink>
                     ))}
                   </div>
@@ -285,13 +256,10 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           })}
         </nav>
 
-        {/* ── User Footer ── */}
+        {/* User Footer */}
         <div
           className="border-t px-3 py-3 flex-shrink-0"
-          style={{
-            borderColor: `rgb(var(--color-border-soft))`,
-            background: `rgb(var(--color-bg-soft))`,
-          }}
+          style={{ borderColor: `rgb(var(--color-border-soft))`, background: `rgb(var(--color-bg-soft))` }}
         >
           <div className="flex items-center gap-2.5 px-1">
             <div
@@ -301,12 +269,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               A
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[12.5px] font-semibold truncate leading-none text-[rgb(var(--color-text))]">
-                Admin User
-              </p>
-              <p className="text-[10.5px] truncate mt-0.5 text-[rgb(var(--color-text-muted))]">
-                admin@corpcrm.com
-              </p>
+              <p className="text-[12.5px] font-semibold truncate leading-none text-[rgb(var(--color-text))]">Admin User</p>
+              <p className="text-[10.5px] truncate mt-0.5 text-[rgb(var(--color-text-muted))]">admin@corpcrm.com</p>
             </div>
             <button
               className="w-7 h-7 flex items-center justify-center rounded-lg transition-all border border-transparent"
@@ -326,10 +290,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
         .sidebar-scroll::-webkit-scrollbar-thumb { background: rgb(var(--color-border)); border-radius: 4px; }
         .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgb(var(--color-border)); opacity: 0.8; }
-        .inactive-nav-item:hover {
-          background: rgb(var(--color-bg-soft));
-          color: rgb(var(--color-text));
-        }
+        .inactive-nav-item:hover { background: rgb(var(--color-bg-soft)); color: rgb(var(--color-text)); }
       `}</style>
     </>
   );
